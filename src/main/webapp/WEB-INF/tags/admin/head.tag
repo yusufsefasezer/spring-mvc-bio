@@ -1,11 +1,11 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="c" uri="jakarta.tags.core" %>
 <%@tag description="head" pageEncoding="UTF-8"%>
 <head>
     <base href="${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/admin/" />
     <!-- meta tags-->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="author" content="Yusuf SEZER" />
+    <meta name="author" content="Yusuf Sezer" />
 
     <!-- title -->
     <title>${pageTitle} - <c:out value="${title}" escapeXml="true" /></title>

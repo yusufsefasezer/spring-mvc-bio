@@ -1,5 +1,5 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="c" uri="jakarta.tags.core" %>
+<%@taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@tag description="footer" pageEncoding="UTF-8" %>
@@ -21,7 +21,7 @@
                     <li class="list-inline-item"><a href="?locale=tr" class="text-danger"><spring:message code="site.footer.turkish" /></a></li>
                     <li class="list-inline-item"><a href="?locale=en" class="text-primary"><spring:message code="site.footer.english" /></a></li>
                 </ul>
-                <a href="https://www.yusufsezer.com" target="_blank">Yusuf SEZER</a> - &copy; <fmt:formatDate pattern="dd/MM/yyyy" value="<%=new java.util.Date()%>" />
+                <a href="https://www.yusufsezer.com" target="_blank">Yusuf Sezer</a> - &copy; <fmt:formatDate pattern="dd/MM/yyyy" value="<%=new java.util.Date()%>" />
             </div>
 
             <div class="col">

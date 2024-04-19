@@ -2,7 +2,6 @@ package com.yusufsezer.controller.advice;
 
 import com.yusufsezer.service.GlobalService;
 import java.util.Arrays;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -10,8 +9,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 @ControllerAdvice
 public class SettingAdvice {
 
-    @Autowired
-    GlobalService globalService;
+    private final GlobalService globalService;
+
+    public SettingAdvice(GlobalService globalService) {
+        this.globalService = globalService;
+    }
 
 //    @Autowired
 //    ApplicationContext applicationContext;

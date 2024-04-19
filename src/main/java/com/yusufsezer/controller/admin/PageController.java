@@ -1,19 +1,18 @@
 package com.yusufsezer.controller.admin;
 
 import com.yusufsezer.dto.PageDTO;
-import com.yusufsezer.service.GlobalService;
 import com.yusufsezer.entity.Page;
 import com.yusufsezer.enumeration.Status;
 import com.yusufsezer.exception.PageNotFound;
-import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.yusufsezer.service.GlobalService;
+import jakarta.validation.Valid;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -21,27 +20,26 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/admin")
 public class PageController {
 
-    @Autowired
-    GlobalService globalService;
+    private final GlobalService globalService;
 
-    @Autowired
-    MessageSourceAccessor messageSourceAccessor;
+    private final MessageSourceAccessor messageSourceAccessor;
+
+    public PageController(GlobalService globalService, MessageSourceAccessor messageSourceAccessor) {
+        this.globalService = globalService;
+        this.messageSourceAccessor = messageSourceAccessor;
+    }
 
     @GetMapping("pages")
     public String pages(ModelMap modelMap) {
-
         modelMap.addAttribute("pages", true);
-
         String pageTitle = messageSourceAccessor.getMessage("site.admin.page.pages");
         modelMap.addAttribute("pageTitle", pageTitle);
-
         modelMap.addAttribute("pageList", globalService.pageService.getPages());
         return "admin/pages";
     }
 
     @GetMapping("page-add")
     public String add(ModelMap modelMap) {
-
         modelMap.addAttribute("pages", true);
         modelMap.addAttribute("action", "add");
 
@@ -71,17 +69,13 @@ public class PageController {
     }
 
     @GetMapping("page-edit/{id:\\d+}")
-    public String edit(
-            @PathVariable Long id,
-            ModelMap modelMap) {
-
+    public String edit(@PathVariable("id") Long id, ModelMap modelMap) {
         PageDTO pageDTO = globalService.pageService
                 .findPage(id)
-                .orElseThrow(() -> new PageNotFound());
+                .orElseThrow(PageNotFound::new);
         modelMap.addAttribute("pages", true);
 
-        String pageTitle = messageSourceAccessor.getMessage("site.admin.page.pages.edit",
-                new Object[]{pageDTO.getTitle()});
+        String pageTitle = messageSourceAccessor.getMessage("site.admin.page.pages.edit", new Object[]{pageDTO.title()});
         modelMap.addAttribute("pageTitle", pageTitle);
 
         modelMap.addAttribute("pageDTO", pageDTO);
@@ -90,7 +84,7 @@ public class PageController {
 
     @PostMapping("page-edit/{id:\\d+}")
     public String edit(
-            @PathVariable Long id,
+            @PathVariable("id") Long id,
             @Valid PageDTO pageDTO,
             BindingResult bindingResult,
             ModelMap modelMap,
@@ -98,7 +92,7 @@ public class PageController {
 
         if (bindingResult.hasErrors()) {
             String pageTitle = messageSourceAccessor.getMessage("site.admin.page.pages.edit",
-                    new Object[]{pageDTO.getTitle()});
+                    new Object[]{pageDTO.title()});
             modelMap.addAttribute("pageTitle", pageTitle);
             return "admin/page-form";
         }
@@ -112,9 +106,7 @@ public class PageController {
     }
 
     @GetMapping("page-delete/{id:\\d+}")
-    public String delete(
-            @PathVariable Long id,
-            RedirectAttributes redirectAttributes) {
+    public String delete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
 
         globalService.pageService.deletePage(id);
 

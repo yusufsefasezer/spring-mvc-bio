@@ -2,7 +2,6 @@ package com.yusufsezer.service;
 
 import com.yusufsezer.entity.Author;
 import java.util.Collection;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,13 +12,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    AuthorService authorService;
+    private final AuthorService authorService;
+
+    public CustomUserDetailsService(AuthorService authorService) {
+        this.authorService = authorService;
+    }
 
     @Override
-    public UserDetails loadUserByUsername(String username)
-            throws UsernameNotFoundException {
-        Author author = authorService.findByUsername(username)
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Author author = authorService
+                .findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(""));
         return new CustomUserDetails(author);
     }

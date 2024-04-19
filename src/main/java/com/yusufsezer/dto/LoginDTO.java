@@ -1,21 +1,19 @@
 package com.yusufsezer.dto;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-@Getter
-@Setter
-public class LoginDTO {
+public record LoginDTO(
+        @NotBlank
+        @Email
+        String email,
+        @NotBlank
+        @Size(min = 6)
+        String password) {
 
-    @NotBlank
-    @Email
-    private String email;
-
-    @NotBlank
-    @Size(min = 6)
-    private String password;
+    public static LoginDTO empty() {
+        return new LoginDTO("", "");
+    }
 
 }

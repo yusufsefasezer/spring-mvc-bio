@@ -1,8 +1,8 @@
 package com.yusufsezer.contract;
 
-import javax.persistence.Column;
-import javax.persistence.Lob;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.Column;
+import jakarta.persistence.Lob;
+import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,7 +20,6 @@ public abstract class BasePerson extends BaseEntity {
     @Lob
     private String description;
 
-    // TODO: silinip, DTO çevirilecek
     public String fullName() {
         return String.format("%s %s", firstName, lastName);
     }

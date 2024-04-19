@@ -4,7 +4,6 @@ import com.yusufsezer.dto.MemberDTO;
 import com.yusufsezer.entity.Author;
 import com.yusufsezer.exception.AuthorNotFound;
 import com.yusufsezer.service.GlobalService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -21,51 +20,45 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/admin")
 public class MemberController {
 
-    @Autowired
-    GlobalService globalService;
+    private final GlobalService globalService;
 
-    @Autowired
-    MessageSourceAccessor messageSourceAccessor;
+    private final MessageSourceAccessor messageSourceAccessor;
+
+    public MemberController(GlobalService globalService, MessageSourceAccessor messageSourceAccessor) {
+        this.globalService = globalService;
+        this.messageSourceAccessor = messageSourceAccessor;
+    }
 
     @GetMapping("members")
     public String members(ModelMap modelMap) {
-
         modelMap.addAttribute("members", true);
-
         String pageTitle = messageSourceAccessor.getMessage("site.admin.page.members");
         modelMap.addAttribute("pageTitle", pageTitle);
-
-        modelMap.addAttribute("memberList",
-                globalService.authorService.getMembers());
+        modelMap.addAttribute("memberList", globalService.authorService.getMembers());
         return "admin/members";
     }
 
     @GetMapping("member-approve/{id:\\d+}")
-    public String approve(
-            @PathVariable Long id,
-            RedirectAttributes redirectAttributes) {
-
+    public String approve(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         Author foundAuthor = findAuthor(id);
 
         globalService.authorService.approve(foundAuthor);
+
         redirectAttributes.addFlashAttribute("message", "approve");
         return "redirect:/admin/members";
     }
 
     @GetMapping("member-edit/{id:\\d+}")
-    public String edit(
-            @PathVariable Long id,
-            ModelMap modelMap) {
-
+    public String edit(@PathVariable("id") Long id, ModelMap modelMap) {
         MemberDTO memberDTO = globalService.authorService
                 .findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND,
                 "Unable to find resource"));
+
         modelMap.addAttribute("members", true);
 
-        String pageTitle = messageSourceAccessor.getMessage("site.admin.page.members.edit",
-                new Object[]{memberDTO.fullName()});
+        String pageTitle = messageSourceAccessor.getMessage("site.admin.page.members.edit", new Object[]{memberDTO.fullName()});
         modelMap.addAttribute("pageTitle", pageTitle);
 
         modelMap.addAttribute("memberDTO", memberDTO);
@@ -74,7 +67,7 @@ public class MemberController {
 
     @PostMapping("member-edit/{id:\\d+}")
     public String edit(
-            @PathVariable Long id,
+            @PathVariable("id") Long id,
             MemberDTO memberDTO,
             BindingResult bindingResult,
             ModelMap modelMap,
@@ -96,10 +89,7 @@ public class MemberController {
     }
 
     @GetMapping("member-delete/{id:\\d+}")
-    public String delete(
-            @PathVariable Long id,
-            RedirectAttributes redirectAttributes) {
-
+    public String delete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         globalService.authorService.delete(id);
 
         redirectAttributes.addFlashAttribute("message", "delete");

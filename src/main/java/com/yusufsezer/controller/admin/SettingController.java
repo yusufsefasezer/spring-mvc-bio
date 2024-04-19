@@ -3,7 +3,6 @@ package com.yusufsezer.controller.admin;
 import com.yusufsezer.entity.Setting;
 import com.yusufsezer.service.GlobalService;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,30 +15,27 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/admin")
 public class SettingController {
 
-    @Autowired
-    GlobalService globalService;
+    private final GlobalService globalService;
 
-    @Autowired
-    MessageSourceAccessor messageSourceAccessor;
+    private final MessageSourceAccessor messageSourceAccessor;
+
+    public SettingController(GlobalService globalService, MessageSourceAccessor messageSourceAccessor) {
+        this.globalService = globalService;
+        this.messageSourceAccessor = messageSourceAccessor;
+    }
 
     @GetMapping("settings")
     public String settings(ModelMap modelMap) {
-
         modelMap.addAttribute("settings", true);
-
         String pageTitle = messageSourceAccessor.getMessage("site.admin.page.settings");
         modelMap.addAttribute("pageTitle", pageTitle);
-
         Settings settings = new Settings(globalService.settingService.getSettings());
         modelMap.addAttribute("settingList", settings);
         return "admin/settings";
     }
 
     @PostMapping("settings")
-    public String settings(
-            Settings settingList,
-            RedirectAttributes redirectAttributes) {
-
+    public String settings(Settings settingList, RedirectAttributes redirectAttributes) {
         settingList.getSettings()
                 .forEach(setting -> {
                     String sKey = setting.getSKey();

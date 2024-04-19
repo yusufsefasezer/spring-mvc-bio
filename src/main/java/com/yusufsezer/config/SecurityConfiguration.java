@@ -1,52 +1,51 @@
 package com.yusufsezer.config;
 
 import com.yusufsezer.enumeration.Role;
-import com.yusufsezer.service.GlobalService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration {
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
-    @Autowired
-    GlobalService globalService;
-
-    @Override
-    protected void configure(HttpSecurity http)
+    @Bean
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            HandlerMappingIntrospector introspector)
             throws Exception {
 
-        http.exceptionHandling().accessDeniedPage("/");
+        http.exceptionHandling((exceptionHandling) -> {
+            exceptionHandling.accessDeniedPage("/");
+        });
 
-        http.authorizeRequests()
-                .mvcMatchers("/admin/**")
-                .hasAnyAuthority(Role.ADMINISTRATOR.name(), Role.EDITOR.name())
-                .mvcMatchers("/login").anonymous();
+        MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector);
 
-        http.formLogin()
-                .loginPage("/login")
-                .usernameParameter("email")
-                .passwordParameter("password");
+        http.authorizeHttpRequests((authorizeHttpRequests) -> {
+            authorizeHttpRequests
+                    .requestMatchers(mvcMatcherBuilder.pattern("/admin/**"))
+                    .hasAnyAuthority(Role.ADMINISTRATOR.name(), Role.EDITOR.name())
+                    .requestMatchers(mvcMatcherBuilder.pattern("/login"))
+                    .anonymous()
+                    .anyRequest()
+                    .permitAll();
+        });
 
-        http.logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+        http.formLogin((formLogin) -> {
+            formLogin.loginPage("/login")
+                    .usernameParameter("email")
+                    .passwordParameter("password");
+        });
 
-    }
+        http.logout((logout) -> {
+            logout.logoutRequestMatcher(mvcMatcherBuilder.pattern("/logout"));
+        });
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth)
-            throws Exception {
-        auth.userDetailsService(globalService.customUserDetailsService)
-                .passwordEncoder(passwordEncoder);
+        return http.build();
     }
 
 }

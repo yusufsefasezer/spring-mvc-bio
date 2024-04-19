@@ -2,35 +2,26 @@ package com.yusufsezer.dto;
 
 import com.yusufsezer.entity.Author;
 import com.yusufsezer.enumeration.Role;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.NotBlank;
 
-@Getter
-@Setter
-public class MemberDTO extends BasePersonDTO {
+public record MemberDTO(
+        @NotBlank
+        String firstName,
+        @NotBlank
+        String lastName,
+        String description,
+        String email,
+        Role role) {
 
-    private String email;
-
-    private Role role;
-
-    public MemberDTO(
-            String firstName,
-            String lastName,
-            String description,
-            String email,
-            Role role) {
-        setFirstName(firstName);
-        setLastName(lastName);
-        setDescription(description);
-        setEmail(email);
-        setRole(role);
+    public String fullName() {
+        return String.format("%s %s", firstName(), lastName());
     }
 
     public static Author toAuthor(MemberDTO memberDTO, Author author) {
-        author.setFirstName(memberDTO.getFirstName());
-        author.setLastName(memberDTO.getLastName());
-        author.setRole(memberDTO.getRole());
-        author.setDescription(memberDTO.getDescription());
+        author.setFirstName(memberDTO.firstName());
+        author.setLastName(memberDTO.lastName());
+        author.setRole(memberDTO.role());
+        author.setDescription(memberDTO.description());
         return author;
     }
 

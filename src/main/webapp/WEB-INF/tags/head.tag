@@ -1,4 +1,4 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="c" uri="jakarta.tags.core" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@tag description="head" pageEncoding="UTF-8" %>
 <head>
@@ -6,7 +6,7 @@
     <!-- meta tags-->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
-    <meta name="author" content="Yusuf SEZER" />
+    <meta name="author" content="Yusuf Sezer" />
 
     <!-- title -->
     <title><c:out value="${title}" escapeXml="true" /></title>

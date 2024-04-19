@@ -6,9 +6,8 @@ import com.yusufsezer.exception.BioNotFound;
 import com.yusufsezer.service.GlobalService;
 import com.yusufsezer.view.ExcelView;
 import com.yusufsezer.view.PDFView;
+import jakarta.validation.Valid;
 import java.util.Optional;
-import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -29,18 +29,20 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/admin")
 public class BioController {
 
-    @Autowired
-    GlobalService globalService;
+    private final GlobalService globalService;
 
-    @Autowired
-    MessageSourceAccessor messageSourceAccessor;
+    private final MessageSourceAccessor messageSourceAccessor;
+
+    public BioController(GlobalService globalService, MessageSourceAccessor messageSourceAccessor) {
+        this.globalService = globalService;
+        this.messageSourceAccessor = messageSourceAccessor;
+    }
 
     @GetMapping("bio")
     public String bio(
-            Optional<String> term,
+            @RequestParam(value = "term", required = false) Optional<String> term,
             ModelMap modelMap,
             @SortDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-
         modelMap.addAttribute("bio", true);
         String pageTitle;
         Page<Person> people;
@@ -61,7 +63,6 @@ public class BioController {
 
     @GetMapping("bio-add")
     public String add(ModelMap modelMap) {
-
         modelMap.addAttribute("bio", true);
         modelMap.addAttribute("action", "add");
 
@@ -92,10 +93,7 @@ public class BioController {
     }
 
     @GetMapping("bio-edit/{id:\\d+}")
-    public String edit(
-            @PathVariable Long id,
-            ModelMap modelMap) {
-
+    public String edit(@PathVariable("id") Long id, ModelMap modelMap) {
         Person foundPerson = findPerson(id);
         modelMap.addAttribute("bio", true);
 
@@ -110,7 +108,7 @@ public class BioController {
 
     @PostMapping("bio-edit/{id:\\d+}")
     public String edit(
-            @PathVariable Long id,
+            @PathVariable("id") Long id,
             @Valid BioDTO bioDTO,
             BindingResult bindingResult,
             ModelMap modelMap,
@@ -133,11 +131,9 @@ public class BioController {
 
     @GetMapping("bio-delete/{id:\\d+}")
     public String delete(
-            @PathVariable Long id,
+            @PathVariable("id") Long id,
             RedirectAttributes redirectAttributes) {
-
         globalService.personService.delete(id);
-
         redirectAttributes.addFlashAttribute("message", "delete");
         return "redirect:/admin/bio";
     }

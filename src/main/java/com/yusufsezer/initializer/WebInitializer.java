@@ -10,7 +10,7 @@ import com.yusufsezer.config.SecurityConfig;
 import com.yusufsezer.config.SecurityConfiguration;
 import com.yusufsezer.config.WebConfig;
 import com.yusufsezer.config.WebMvcConfiguration;
-import javax.servlet.Filter;
+import jakarta.servlet.Filter;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 

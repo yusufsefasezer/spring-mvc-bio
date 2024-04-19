@@ -6,19 +6,17 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
+import com.yusufsezer.projection.IViewInfo;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.awt.Color;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.web.servlet.view.document.AbstractPdfView;
-import com.yusufsezer.projection.IViewInfo;
 
 public class PDFView extends AbstractPdfView {
 
-    @Autowired
-    MessageSourceAccessor messageSourceAccessor;
+    private final MessageSourceAccessor messageSourceAccessor;
 
     public PDFView(MessageSourceAccessor messageSourceAccessor) {
         this.messageSourceAccessor = messageSourceAccessor;
@@ -35,7 +33,7 @@ public class PDFView extends AbstractPdfView {
         Iterable<IViewInfo> views = (Iterable<IViewInfo>) model.get("people");
 
         document.setMargins(0f, 0f, 0f, 0f);
-        document.addAuthor("Yusuf SEZER(www.yusufsezer.com)");
+        document.addAuthor("Yusuf Sezer(www.yusufsezer.com)");
         document.addCreationDate();
         document.addCreator("www.yusufsezer.com");
 

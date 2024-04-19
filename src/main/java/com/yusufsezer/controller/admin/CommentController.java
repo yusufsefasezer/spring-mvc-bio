@@ -3,7 +3,6 @@ package com.yusufsezer.controller.admin;
 import com.yusufsezer.entity.Comment;
 import com.yusufsezer.exception.CommentNotFound;
 import com.yusufsezer.service.GlobalService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -18,31 +17,28 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/admin")
 public class CommentController {
 
-    @Autowired
-    GlobalService globalService;
+    private final GlobalService globalService;
 
-    @Autowired
-    MessageSourceAccessor messageSourceAccessor;
+    private final MessageSourceAccessor messageSourceAccessor;
+
+    public CommentController(GlobalService globalService, MessageSourceAccessor messageSourceAccessor) {
+        this.globalService = globalService;
+        this.messageSourceAccessor = messageSourceAccessor;
+    }
 
     @GetMapping("comments")
     public String comments(ModelMap modelMap) {
-
         modelMap.addAttribute("comments", true);
-
         String pageTitle = messageSourceAccessor.getMessage("site.admin.page.comments");
         modelMap.addAttribute("pageTitle", pageTitle);
-
-        modelMap.addAttribute("commentList",
-                globalService.commentService.getComments());
-        return "/admin/comments";
+        modelMap.addAttribute("commentList", globalService.commentService.getComments());
+        return "admin/comments";
     }
 
     @PostMapping("comments")
-    public String comments(
-            @ModelAttribute Comment comment,
-            RedirectAttributes redirectAttributes) {
-
+    public String comments(@ModelAttribute Comment comment, RedirectAttributes redirectAttributes) {
         Comment foundComment = findComment(comment.getId());
+
         foundComment.setContent(comment.getContent());
         globalService.commentService.save(foundComment);
 
@@ -51,11 +47,9 @@ public class CommentController {
     }
 
     @GetMapping("comment-delete/{id:\\d+}")
-    public String delete(
-            @PathVariable Long id,
-            RedirectAttributes redirectAttributes) {
-
+    public String delete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         Comment foundComment = findComment(id);
+
         globalService.commentService.delete(foundComment);
 
         redirectAttributes.addFlashAttribute("message", "delete");
@@ -63,11 +57,9 @@ public class CommentController {
     }
 
     @GetMapping("comment-approve/{id:\\d+}")
-    public String approve(
-            @PathVariable Long id,
-            RedirectAttributes redirectAttributes) {
-
+    public String approve(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         Comment foundComment = findComment(id);
+
         foundComment.setActive(true);
         globalService.commentService.save(foundComment);
 
@@ -76,11 +68,9 @@ public class CommentController {
     }
 
     @GetMapping("comment-disapprove/{id:\\d+}")
-    public String disapprove(
-            @PathVariable Long id,
-            RedirectAttributes redirectAttributes) {
-
+    public String disapprove(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         Comment foundComment = findComment(id);
+
         foundComment.setActive(false);
         globalService.commentService.save(foundComment);
 

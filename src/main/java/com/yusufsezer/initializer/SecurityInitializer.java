@@ -1,7 +1,7 @@
 package com.yusufsezer.initializer;
 
-import javax.servlet.FilterRegistration;
-import javax.servlet.ServletContext;
+import jakarta.servlet.FilterRegistration;
+import jakarta.servlet.ServletContext;
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 import org.springframework.web.filter.CharacterEncodingFilter;
 

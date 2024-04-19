@@ -4,15 +4,17 @@ import com.yusufsezer.dto.PageDTO;
 import com.yusufsezer.entity.Page;
 import com.yusufsezer.repository.PageRepository;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PageService {
 
-    @Autowired
-    PageRepository pageRepository;
+    private final PageRepository pageRepository;
+
+    public PageService(PageRepository pageRepository) {
+        this.pageRepository = pageRepository;
+    }
 
     public Optional<Page> findBySlug(String slug) {
         return pageRepository.findBySlug(slug);
@@ -23,7 +25,7 @@ public class PageService {
     }
 
     public Optional<PageDTO> findPage(Long id) {
-        return pageRepository.getById(id);
+        return pageRepository.getById(id, PageDTO.class);
     }
 
     public Iterable<Page> getPages() {

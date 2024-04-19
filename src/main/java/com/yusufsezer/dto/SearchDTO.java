@@ -1,14 +1,9 @@
 package com.yusufsezer.dto;
 
-import javax.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.Size;
 
-@Getter
-@Setter
-public class SearchDTO {
-
-    @Size(min = 3, max = 20)
-    private String term;
+public record SearchDTO(
+        @Size(min = 3, max = 20)
+        String term) {
 
 }

@@ -1,8 +1,7 @@
 package com.yusufsezer.controller.admin;
 
-import com.yusufsezer.service.GlobalService;
 import com.yusufsezer.service.CustomUserDetailsService.CustomUserDetails;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.yusufsezer.service.GlobalService;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -14,17 +13,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 public class AdminController {
 
-    @Autowired
-    GlobalService globalService;
+    private final GlobalService globalService;
 
-    @Autowired
-    MessageSourceAccessor messageSourceAccessor;
+    private final MessageSourceAccessor messageSourceAccessor;
 
-    @GetMapping
-    public String home(
-            ModelMap modelMap,
-            @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public AdminController(GlobalService globalService, MessageSourceAccessor messageSourceAccessor) {
+        this.globalService = globalService;
+        this.messageSourceAccessor = messageSourceAccessor;
+    }
 
+    @GetMapping({"", "/"})
+    public String home(ModelMap modelMap, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         modelMap.addAttribute("dashboard", true);
 
         String welcome = messageSourceAccessor.getMessage("site.admin.page.home.welcome",

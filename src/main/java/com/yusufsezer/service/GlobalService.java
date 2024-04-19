@@ -1,27 +1,34 @@
 package com.yusufsezer.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GlobalService {
 
-    @Autowired
-    public AuthorService authorService;
+    public final AuthorService authorService;
 
-    @Autowired
-    public CommentService commentService;
+    public final CommentService commentService;
 
-    @Autowired
-    public CustomUserDetailsService customUserDetailsService;
+    public final CustomUserDetailsService customUserDetailsService;
 
-    @Autowired
-    public PageService pageService;
+    public final PageService pageService;
 
-    @Autowired
-    public PersonService personService;
+    public final PersonService personService;
 
-    @Autowired
-    public SettingService settingService;
+    public final SettingService settingService;
+
+    public GlobalService(AuthorService authorService,
+            CommentService commentService,
+            CustomUserDetailsService customUserDetailsService,
+            PageService pageService,
+            PersonService personService,
+            SettingService settingService) {
+        this.authorService = authorService;
+        this.commentService = commentService;
+        this.customUserDetailsService = customUserDetailsService;
+        this.pageService = pageService;
+        this.personService = personService;
+        this.settingService = settingService;
+    }
 
 }

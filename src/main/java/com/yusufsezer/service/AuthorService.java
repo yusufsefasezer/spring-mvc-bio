@@ -8,7 +8,6 @@ import com.yusufsezer.exception.AuthorAlreadyExistException;
 import com.yusufsezer.projection.IMember;
 import com.yusufsezer.repository.AuthorRepository;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,11 +15,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthorService {
 
-    @Autowired
-    AuthorRepository authorRepository;
+    private final AuthorRepository authorRepository;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+
+    public AuthorService(AuthorRepository authorRepository, PasswordEncoder passwordEncoder) {
+        this.authorRepository = authorRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public Iterable<IMember> getMembers() {
         return authorRepository.findBy(Sort.by(Sort.Order.desc("id")));
@@ -31,7 +33,7 @@ public class AuthorService {
     }
 
     public Optional<MemberDTO> findById(Long id) {
-        return authorRepository.getById(id);
+        return authorRepository.getById(id, MemberDTO.class);
     }
 
     public Optional<Author> findByUsername(String username) {
@@ -50,14 +52,13 @@ public class AuthorService {
     public void register(RegisterDTO registerDTO)
             throws AuthorAlreadyExistException {
 
-        String email = registerDTO.getEmail();
+        String email = registerDTO.email();
         if (check(email)) {
             throw new AuthorAlreadyExistException();
         }
 
         Author newAuthor = registerDTO.toAuthor();
-        String encodedPassword = passwordEncoder
-                .encode(registerDTO.getPassword());
+        String encodedPassword = passwordEncoder.encode(registerDTO.password());
         newAuthor.setPassword(encodedPassword);
         newAuthor.setRole(Role.WRITER);
         newAuthor.setActive(false);

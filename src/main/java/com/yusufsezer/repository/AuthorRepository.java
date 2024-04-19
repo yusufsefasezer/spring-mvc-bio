@@ -1,6 +1,5 @@
 package com.yusufsezer.repository;
 
-import com.yusufsezer.dto.MemberDTO;
 import com.yusufsezer.entity.Author;
 import com.yusufsezer.projection.IMember;
 import java.util.Optional;
@@ -13,7 +12,7 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
 
     boolean existsByEmail(String email);
 
-    Optional<MemberDTO> getById(Long id);
+    <T> Optional<T> getById(Long id, Class<T> type);
 
     Iterable<IMember> findBy(Sort sort);
 

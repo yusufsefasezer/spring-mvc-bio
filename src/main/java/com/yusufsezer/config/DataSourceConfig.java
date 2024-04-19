@@ -25,9 +25,9 @@ public class DataSourceConfig {
         DriverManagerDataSource driverManagerDataSource;
         driverManagerDataSource = new DriverManagerDataSource();
         driverManagerDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/test");
+        driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/spring-mvc-bio");
         driverManagerDataSource.setUsername("root");
-        driverManagerDataSource.setPassword("");
+        driverManagerDataSource.setPassword("root");
         return driverManagerDataSource;
     }
 

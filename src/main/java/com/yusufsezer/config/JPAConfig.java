@@ -1,14 +1,12 @@
 package com.yusufsezer.config;
 
-import javax.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -16,11 +14,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class JPAConfig {
 
-    @Autowired
-    DataSource dataSource;
-
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean lcemf;
         lcemf = new LocalContainerEntityManagerFactoryBean();
         lcemf.setDataSource(dataSource);
@@ -35,7 +30,7 @@ public class JPAConfig {
         hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
         hibernateJpaVendorAdapter.setShowSql(true);
         hibernateJpaVendorAdapter.setGenerateDdl(true);
-        hibernateJpaVendorAdapter.setDatabase(Database.H2);
+        //hibernateJpaVendorAdapter.setDatabase(Database.H2);
         return hibernateJpaVendorAdapter;
     }
 

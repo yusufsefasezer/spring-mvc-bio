@@ -3,15 +3,17 @@ package com.yusufsezer.service;
 import com.yusufsezer.entity.Comment;
 import com.yusufsezer.repository.CommentRepository;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.yusufsezer.projection.ICommentList;
 
 @Service
 public class CommentService {
 
-    @Autowired
-    CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
+
+    public CommentService(CommentRepository commentRepository) {
+        this.commentRepository = commentRepository;
+    }
 
     public Iterable<ICommentList> getComments() {
         return commentRepository.findByOrderByIdDesc();

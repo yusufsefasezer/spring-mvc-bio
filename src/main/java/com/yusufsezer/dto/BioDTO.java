@@ -3,8 +3,8 @@ package com.yusufsezer.dto;
 import com.yusufsezer.entity.Person;
 import com.yusufsezer.enumeration.Status;
 import java.util.Map;
-import javax.persistence.ElementCollection;
-import javax.validation.constraints.NotBlank;
+import jakarta.persistence.ElementCollection;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -3,10 +3,10 @@ package com.yusufsezer.initializer;
 import com.github.javafaker.Faker;
 import com.github.javafaker.Internet;
 import com.github.javafaker.Name;
-import com.yusufsezer.entity.Page;
-import com.yusufsezer.entity.Person;
 import com.yusufsezer.entity.Author;
 import com.yusufsezer.entity.Comment;
+import com.yusufsezer.entity.Page;
+import com.yusufsezer.entity.Person;
 import com.yusufsezer.entity.Setting;
 import com.yusufsezer.enumeration.Role;
 import com.yusufsezer.enumeration.Status;
@@ -16,6 +16,8 @@ import com.yusufsezer.repository.PageRepository;
 import com.yusufsezer.repository.PersonRepository;
 import com.yusufsezer.repository.SettingRepository;
 import com.yusufsezer.util.EnumUtil;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
@@ -25,9 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -35,26 +34,36 @@ import org.springframework.stereotype.Component;
 @Component
 public class DataInitializer {
 
-    @Autowired
-    Faker faker;
+    private final Faker faker;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    AuthorRepository authorRepository;
+    private final AuthorRepository authorRepository;
 
-    @Autowired
-    CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
 
-    @Autowired
-    PageRepository pageRepository;
+    private final PageRepository pageRepository;
 
-    @Autowired
-    PersonRepository personRepository;
+    private final PersonRepository personRepository;
 
-    @Autowired
-    SettingRepository settingRepository;
+    private final SettingRepository settingRepository;
+
+    public DataInitializer(
+            Faker faker,
+            PasswordEncoder passwordEncoder,
+            AuthorRepository authorRepository,
+            CommentRepository commentRepository,
+            PageRepository pageRepository,
+            PersonRepository personRepository,
+            SettingRepository settingRepository) {
+        this.faker = faker;
+        this.passwordEncoder = passwordEncoder;
+        this.authorRepository = authorRepository;
+        this.commentRepository = commentRepository;
+        this.pageRepository = pageRepository;
+        this.personRepository = personRepository;
+        this.settingRepository = settingRepository;
+    }
 
     @PostConstruct
     public void init() {
@@ -69,7 +78,7 @@ public class DataInitializer {
     private void initAdmin() {
         Author author = new Author();
         author.setFirstName("Yusuf");
-        author.setLastName("SEZER");
+        author.setLastName("Sezer");
         author.setDescription("yusufsezer.com");
         author.setEmail("yusufsezer@mail.com");
 

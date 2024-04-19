@@ -1,11 +1,11 @@
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@tag description="footer" pageEncoding="UTF-8" %>
 <footer class="container">
     <div class="row">
         <div class="col-md-12 text-center p-3">
             <p><spring:message code="site.admin.footer.copyright" /> &copy; <fmt:formatDate pattern="dd/MM/yyyy" value="<%=new java.util.Date()%>" /> 
-                <a href="https://www.yusufsezer.com" target="_blank">Yusuf SEZER</a>
+                <a href="https://www.yusufsezer.com" target="_blank">Yusuf Sezer</a>
             </p>
         </div>
     </div>
